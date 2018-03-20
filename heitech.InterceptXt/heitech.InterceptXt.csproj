@@ -9,8 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Interceptor\" />
-    <Folder Include="DataTransfer\" />
+    <Reference Include="heitech.ObjectExpander">
+      <HintPath>..\..\..\..\..\..\Source\Repos\ObjectExtender\heitech.ObjectExpander\heitech.ObjectExpander\bin\Debug\heitech.ObjectExpander.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

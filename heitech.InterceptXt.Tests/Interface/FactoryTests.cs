@@ -1,4 +1,5 @@
 ﻿using heitech.InterceptXt.Interface;
+using heitech.InterceptXt.Pipeline;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -8,9 +9,21 @@ namespace heitech.InterceptXt.Tests.Interface
     public class FactoryTests
     {
         [TestMethod]
-        public void Factory_Create_ThrowsNotImplementedException()
+        public void Factory_Create_Returns_Pipe_WithDefaultInterceptionContext_IfNotSpecified()
         {
-            Assert.ThrowsException<NotImplementedException>(() => Factory.Create());
+            Action<IIntercept> _do = _ => { };
+            Action<IIntercept> _doBack = _ => { };
+            var interceptors = new IIntercept[] { };
+            Do(() => Factory.Create(interceptors));
+            Do(() => Factory.Create(_do, interceptors));
+            Do(() => Factory.Create(_do, _doBack, interceptors));
+            Do(() => Factory.Create(_do, _doBack, new IntercceptionContextMock(), interceptors));
+        }
+
+        private void Do(Func<IInterceptionPipe> _do)
+        {
+            IInterceptionPipe pipe = _do();
+            Assert.AreEqual(typeof(Pipe), pipe.GetType());
         }
     }
 }
