@@ -25,5 +25,12 @@ namespace heitech.InterceptXt.Tests.Interface
             IInterceptionPipe pipe = _do();
             Assert.AreEqual(typeof(Pipe), pipe.GetType());
         }
+
+        [TestMethod]
+        public void Factory_CreateMultiPipe_Returns_MultiPipe()
+        {
+            var multi = Factory.CreateMultiPipe<string>();
+            Assert.AreEqual(typeof(MultiPipe<string>), multi.GetType());
+        }
     }
 }

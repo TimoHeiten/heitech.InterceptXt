@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="heitech.ObjectXt" Version="1.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
     <PackageReference Include="MSTest.TestAdapter" Version="1.1.18" />
     <PackageReference Include="MSTest.TestFramework" Version="1.1.18" />
@@ -14,6 +15,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\heitech.InterceptXt\heitech.InterceptXt.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="heitech.ObjectXt">
+      <HintPath>..\..\..\..\..\..\Source\Repos\ObjectExtender\heitech.ObjectExpander\heitech.ObjectXt\bin\Release\netstandard2.0\heitech.ObjectXt.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

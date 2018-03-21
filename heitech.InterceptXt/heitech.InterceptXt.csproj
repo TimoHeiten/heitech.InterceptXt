@@ -6,12 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="heitech.LinqXt" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="heitech.ObjectExpander">
-      <HintPath>..\..\..\..\..\..\Source\Repos\ObjectExtender\heitech.ObjectExpander\heitech.ObjectExpander\bin\Debug\heitech.ObjectExpander.dll</HintPath>
-    </Reference>
+    <PackageReference Include="heitech.ObjectXt" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

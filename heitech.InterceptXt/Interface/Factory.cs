@@ -1,6 +1,6 @@
 ﻿using heitech.InterceptXt.Context;
 using heitech.InterceptXt.Pipeline;
-using heitech.ObjectExpander.AttributeExtension;
+using heitech.ObjectXt.AttributeExtension;
 using System;
 
 namespace heitech.InterceptXt.Interface
@@ -21,5 +21,9 @@ namespace heitech.InterceptXt.Interface
 
         private static IInterceptionContext GetContext() 
             => new InterceptorContext(AttributeExtenderFactory.Create<string>());
+
+        //##### multipipe
+        public static IMultiPipe<Key> CreateMultiPipe<Key>()
+            => new MultiPipe<Key>();
     }
 }
