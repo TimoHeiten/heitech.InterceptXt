@@ -17,10 +17,4 @@
     <ProjectReference Include="..\heitech.InterceptXt\heitech.InterceptXt.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="heitech.ObjectXt">
-      <HintPath>..\..\..\..\..\..\Source\Repos\ObjectExtender\heitech.ObjectExpander\heitech.ObjectXt\bin\Release\netstandard2.0\heitech.ObjectXt.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

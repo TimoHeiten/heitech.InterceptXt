@@ -1,13 +1,14 @@
 ﻿using heitech.InterceptXt.Interface;
 using heitech.ObjectXt.Interfaces;
-using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace heitech.InterceptXt.Context
 {
+    // only a wrapper around AttributeExtender
+    [ExcludeFromCodeCoverage]
     public class InterceptorContext : IInterceptionContext
     {
         private readonly IAttributeExtender<string> extender;
-        private readonly Dictionary<string, object> dictionary = new Dictionary<string, object>();
 
         public InterceptorContext(IAttributeExtender<string> extender) => this.extender = extender;
 
@@ -25,6 +26,7 @@ namespace heitech.InterceptXt.Context
                 extender.Add(key, value);
         }
 
-        public bool TryGet<T>(string key, out T t) => extender.TryGetAttribute<T>(key, out t);
+        public bool TryGet<T>(string key, out T t) 
+            => extender.TryGetAttribute<T>(key, out t);
     }
 }
