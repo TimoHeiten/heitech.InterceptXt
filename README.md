@@ -13,10 +13,10 @@ A possible scenario is to use decorated components and build a specific intercep
 The Interceptor can then process the decoration, add new ones or remove others etc.
 
 ## How
-Implement IInterceptor or use WrappedInterceptor and inject an Action<IInterceptionContext>
+Implement IInterceptor<T> or use WrappedInterceptor<T> and inject an Action<IInterceptionContext, T>
 
 ```
-class MyInterceptor : IInterceptor
+class MyInterceptor<string> : IInterceptor<string>
 {
   public void Invoke(IInterceptionContext context)
   {
@@ -25,27 +25,25 @@ class MyInterceptor : IInterceptor
 }
 
 ...
-public void AnyAction(IInterceptionContext context)
+public void AnyAction(IInterceptionContext context, string item)
 { /* DoOtherStuff()*/ }
 
-var wrapper = new WrapperInterceptor(AnyAction);
+var wrapper = new WrapperInterceptor<string>(AnyAction);
 ...
 
 ```
 
-Next up instantiate the Pipe with the static Factory.Create method.
+Next up instantiate the Pipe<T> with the static Factory.Create<T> method.
 This method has several overloads and lets you define which predefined Actions should be performed on pre and postprocessing the 
 objects. Furthermore you can specify a default IInterceptioncontext. This example uses both of the above defined Interceptors.
 
 When you acquired the pipe, you can start the interception, which will trigger a preprocessing for all interceptors and directly after that will 
-start a postprocessing. To invoke either alone, call the wanted method on the IInterceptionPipe instance.
+start a postprocessing. To invoke either alone, call the desired method on the IInterceptionPipe<T> instance.
 ```
-var pipe = Factory.Create(new MyInterceptor(), wrapper);
+var pipe = Factory.Create<string>(new MyInterceptor(), wrapper);
 
-pipe.StartIntercept();
+pipe.Process("any interceptable string value");
 ```
 
 ## todo
-make async / return Task
-rename forward and backward to pre and postprocess
-with InterceptionContext a second argument of Type T has to be provided. (does not intercept any object til now)
+make async / return Task methods
