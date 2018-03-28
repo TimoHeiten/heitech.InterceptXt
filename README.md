@@ -40,7 +40,7 @@ objects. Furthermore you can specify a default IInterceptioncontext. This exampl
 When you acquired the pipe, you can start the interception, which will trigger a preprocessing for all interceptors and directly after that will 
 start a postprocessing. To invoke either alone, call the desired method on the IInterceptionPipe<T> instance.
 ```
-var pipe = Factory.Create<string>(new MyInterceptor(), wrapper);
+var pipe = Factory.Create<string>(new MyInterceptor<string>(), wrapper);
 
 pipe.Process("any interceptable string value");
 ```
