@@ -26,9 +26,9 @@ namespace heitech.InterceptXt.Tests.Pipeline
         {
             string key = "key";
             pipe.Map(key, mock);
-            AssertMap(() => pipe.StartIntercept(key, intercept));
-            AssertMap(() => pipe.ForwardIntercept(key, intercept));
-            AssertMap(() => pipe.BackwardIntercept(key, intercept));
+            AssertMap(() => pipe.Process(key, intercept));
+            AssertMap(() => pipe.Preprocess(key, intercept));
+            AssertMap(() => pipe.Postprocess(key, intercept));
         }
 
         private void AssertMap(Action _do)
@@ -41,9 +41,9 @@ namespace heitech.InterceptXt.Tests.Pipeline
         [TestMethod]
         public void Multipipe_ThrowsAttributeNotFoundException_ifPipe_IsNotMapped()
         {
-            Assert.ThrowsException<KeyNotFoundException>(() => pipe.StartIntercept("key", intercept));
-            Assert.ThrowsException<KeyNotFoundException>(() => pipe.ForwardIntercept("key", intercept));
-            Assert.ThrowsException<KeyNotFoundException>(() => pipe.BackwardIntercept("key", intercept));
+            Assert.ThrowsException<KeyNotFoundException>(() => pipe.Process("key", intercept));
+            Assert.ThrowsException<KeyNotFoundException>(() => pipe.Preprocess("key", intercept));
+            Assert.ThrowsException<KeyNotFoundException>(() => pipe.Postprocess("key", intercept));
         }
     }
 }

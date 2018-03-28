@@ -6,22 +6,22 @@ namespace heitech.InterceptXt.Pipeline
 {
     internal class MultiPipe<Tkey, T> : AttributeExtenderBase<Tkey>, IMultiPipe<Tkey, T>
     {
-        public void BackwardIntercept(Tkey key, T obj) => GetPipe(key).BackwardIntercept(obj);
+        public void Postprocess(Tkey key, T obj) => GetPipe(key).Postprocess(obj);
 
-        public void BackwardIntercept(Tkey key, IInterceptionContext context, T obj)
-            => GetPipe(key).BackwardIntercept(context, obj);
+        public void Postprocess(Tkey key, IInterceptionContext context, T obj)
+            => GetPipe(key).Postprocess(obj);
 
-        public void ForwardIntercept(Tkey key, T obj)
-            => GetPipe(key).ForwardIntercept(obj);
+        public void Preprocess(Tkey key, T obj)
+            => GetPipe(key).Preprocess(obj);
 
-        public void ForwardIntercept(Tkey key, IInterceptionContext context, T obj)
-            => GetPipe(key).ForwardIntercept(context, obj);
+        public void Preprocess(Tkey key, IInterceptionContext context, T obj)
+            => GetPipe(key).Preprocess(context, obj);
 
-        public void StartIntercept(Tkey key, T obj)
-            => GetPipe(key).StartIntercept(obj);
+        public void Process(Tkey key, T obj)
+            => GetPipe(key).Process(obj);
 
-        public void StartIntercept(Tkey key, IInterceptionContext context, T obj)
-            => GetPipe(key).StartIntercept(context, obj);
+        public void Process(Tkey key, IInterceptionContext context, T obj)
+            => GetPipe(key).Process(context, obj);
 
         public void Map(Tkey key, IInterceptionPipe<T> pipe)
             => this[key] = pipe;

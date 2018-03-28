@@ -5,22 +5,22 @@ namespace heitech.InterceptXt.Tests
     class InterceptionPipeMock<T> : IInterceptionPipe<T>
     {
         internal bool WasInvoked;
-        public void BackwardIntercept(T obj)
+        public void Postprocess(T obj)
             => WasInvoked = true;
 
-        public void BackwardIntercept(IInterceptionContext context, T obj)
+        public void Postprocess(IInterceptionContext context, T obj)
             => WasInvoked = true;
 
-        public void ForwardIntercept(T obj)
+        public void Preprocess(T obj)
             => WasInvoked = true;
 
-        public void ForwardIntercept(IInterceptionContext context, T obj)
+        public void Preprocess(IInterceptionContext context, T obj)
             => WasInvoked = true;
 
-        public void StartIntercept(T obj)
+        public void Process(T obj)
             => WasInvoked = true;
 
-        public void StartIntercept(IInterceptionContext context, T obj)
+        public void Process(IInterceptionContext context, T obj)
             => WasInvoked = true;
     }
 }

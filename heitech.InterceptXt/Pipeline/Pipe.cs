@@ -28,10 +28,10 @@ namespace heitech.InterceptXt.Pipeline
             this.fallback = fallback;
         }
 
-        public void BackwardIntercept(T obj)
-            => BackwardIntercept(fallback, obj);
+        public void Postprocess(T obj)
+            => Postprocess(fallback, obj);
 
-        public void BackwardIntercept(IInterceptionContext context, T obj)
+        public void Postprocess(IInterceptionContext context, T obj)
         {
             var reversed = interceptors.Reverse();
             foreach (IIntercept<T> interceptor in reversed)
@@ -44,23 +44,23 @@ namespace heitech.InterceptXt.Pipeline
             }
         }
 
-        public void ForwardIntercept(T obj)
-            => ForwardIntercept(fallback, obj);
+        public void Preprocess(T obj)
+            => Preprocess(fallback, obj);
 
-        public void ForwardIntercept(IInterceptionContext context, T obj)
+        public void Preprocess(IInterceptionContext context, T obj)
             => interceptors.ForAll(x =>
             {
                 startingAction(x);
                 x.Invoke(context, obj);
             });
 
-        public void StartIntercept(T obj)
-            => StartIntercept(fallback, obj);
+        public void Process(T obj)
+            => Process(fallback, obj);
 
-        public void StartIntercept(IInterceptionContext context, T obj)
+        public void Process(IInterceptionContext context, T obj)
         {
-            ForwardIntercept(context, obj);
-            BackwardIntercept(context, obj);
+            Preprocess(context, obj);
+            Postprocess(context, obj);
         }
     }
 }

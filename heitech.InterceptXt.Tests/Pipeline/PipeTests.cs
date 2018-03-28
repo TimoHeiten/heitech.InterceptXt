@@ -28,14 +28,14 @@ namespace heitech.InterceptXt.Tests.Pipeline
         [TestMethod]
         public void Pipe_InterceptWithoutContext_CallsAllInterceptorsWithDefaultContext()
         {
-            pipe.StartIntercept(intercept);
+            pipe.Process(intercept);
             Assert.AreSame(fallbackContext, interceptor.Context);
         }
 
         [TestMethod]
         public void Pipe_InterceptWithContext_DoesNotUseDefaultContext()
         {
-            pipe.StartIntercept(new IntercceptionContextMock(), intercept);
+            pipe.Process(new IntercceptionContextMock(), intercept);
             Assert.AreNotSame(fallbackContext, interceptor.Context);
         }
 
@@ -44,10 +44,10 @@ namespace heitech.InterceptXt.Tests.Pipeline
         {
             pipe = new Pipe<string>(fallbackContext, Do, interceptor, interceptor, interceptor);
 
-            InvokeAnyIntercept(() => pipe.StartIntercept(intercept));
-            InvokeAnyIntercept(() => pipe.StartIntercept(fallbackContext, intercept));
-            InvokeAnyIntercept(() => pipe.ForwardIntercept(intercept));
-            InvokeAnyIntercept(() => pipe.ForwardIntercept(fallbackContext, intercept));
+            InvokeAnyIntercept(() => pipe.Process(intercept));
+            InvokeAnyIntercept(() => pipe.Process(fallbackContext, intercept));
+            InvokeAnyIntercept(() => pipe.Preprocess(intercept));
+            InvokeAnyIntercept(() => pipe.Preprocess(fallbackContext, intercept));
         }
 
         private void InvokeAnyIntercept(Action action)
@@ -62,10 +62,10 @@ namespace heitech.InterceptXt.Tests.Pipeline
         {
             pipe = new Pipe<string>(fallbackContext, Do, DoBackwards, interceptor, backwardIntercept);
 
-            CountBackWardIntercept(() => pipe.BackwardIntercept(intercept));
-            CountBackWardIntercept(() => pipe.BackwardIntercept(fallbackContext, intercept));
-            CountBackWardIntercept(() => pipe.StartIntercept(intercept));
-            CountBackWardIntercept(() => pipe.StartIntercept(fallbackContext, intercept));
+            CountBackWardIntercept(() => pipe.Postprocess(intercept));
+            CountBackWardIntercept(() => pipe.Postprocess(fallbackContext, intercept));
+            CountBackWardIntercept(() => pipe.Process(intercept));
+            CountBackWardIntercept(() => pipe.Process(fallbackContext, intercept));
         }
 
         private void CountBackWardIntercept(Action action)
@@ -78,11 +78,11 @@ namespace heitech.InterceptXt.Tests.Pipeline
 
         [TestMethod]
         public void Pipe_ForwardIntercept_InvokesAllItems()
-        => ForwardContext(() => pipe.ForwardIntercept(intercept));
+        => ForwardContext(() => pipe.Preprocess(intercept));
 
         [TestMethod]
         public void Pipe_ForwardWithContext_invokesAllItems()
-            => ForwardContext(() => pipe.ForwardIntercept(fallbackContext, intercept));
+            => ForwardContext(() => pipe.Preprocess(fallbackContext, intercept));
 
         private void ForwardContext(Action action)
         {
@@ -95,7 +95,7 @@ namespace heitech.InterceptXt.Tests.Pipeline
         public void Pipe_StartIntercept_InvokesFullCircle_ForwadAndBackwardInvocation()
         {
             pipe = new Pipe<string>(fallbackContext, Do, DoBackwards, interceptor, backwardIntercept);
-            pipe.StartIntercept(intercept);
+            pipe.Process(intercept);
             Assert.AreEqual(2, countAction);
             Assert.AreEqual(2, countBackwardsAction);
             Assert.IsNotNull(interceptor.Context);
@@ -105,8 +105,8 @@ namespace heitech.InterceptXt.Tests.Pipeline
         [TestMethod]
         public void Pipe_InterceptingBackwardsWithoutContextCallsDefaultContext()
         {
-            CheckDefaultUsage(() => pipe.BackwardIntercept(intercept));
-            CheckDefaultUsage(() => pipe.ForwardIntercept(intercept));
+            CheckDefaultUsage(() => pipe.Postprocess(intercept));
+            CheckDefaultUsage(() => pipe.Preprocess(intercept));
         }
 
         private void CheckDefaultUsage(Action action)
@@ -119,14 +119,14 @@ namespace heitech.InterceptXt.Tests.Pipeline
         [TestMethod]
         public void Pipe_InvokesBackwardInvoke_IfInterceptorImplementsInterfaceIBothways_Directly()
         {
-            pipe.BackwardIntercept(intercept);
+            pipe.Postprocess(intercept);
             Assert.IsTrue(backwardIntercept.WasInvokedDirectly);
         }
 
         [TestMethod]
         public void Pipe_DoIntercept_InvokesBackwardDirectlyIf_Interceptor_Implements_BothWaysInterface()
         {
-            pipe.StartIntercept(intercept);
+            pipe.Process(intercept);
             Assert.IsTrue(backwardIntercept.WasInvokedDirectly);
         }
 
@@ -135,7 +135,7 @@ namespace heitech.InterceptXt.Tests.Pipeline
         {
             pipe = new Pipe<string>(fallbackContext, Do, SetFirst, interceptor, backwardIntercept);
 
-            pipe.BackwardIntercept(intercept);
+            pipe.Postprocess(intercept);
             Assert.AreSame(first, backwardIntercept);
             Assert.AreNotSame(first, interceptor);
         }
