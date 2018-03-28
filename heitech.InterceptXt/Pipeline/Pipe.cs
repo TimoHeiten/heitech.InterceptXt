@@ -9,18 +9,18 @@ using System.Runtime.CompilerServices;
 
 namespace heitech.InterceptXt.Pipeline
 {
-    internal class Pipe : IInterceptionPipe
+    internal class Pipe<T> : IInterceptionPipe<T>
     {
-        private readonly Action<IIntercept> endAction;
+        private readonly Action<IIntercept<T>> endAction;
         private readonly IInterceptionContext fallback;
-        private readonly Action<IIntercept> startingAction;
-        private readonly IEnumerable<IIntercept> interceptors;
+        private readonly Action<IIntercept<T>> startingAction;
+        private readonly IEnumerable<IIntercept<T>> interceptors;
 
-        public Pipe(IInterceptionContext fallback, Action<IIntercept> startingAction, params IIntercept[] interceptors)
+        public Pipe(IInterceptionContext fallback, Action<IIntercept<T>> startingAction, params IIntercept<T>[] interceptors)
             : this (fallback, startingAction, i => { }, interceptors)
         { }
 
-        public Pipe(IInterceptionContext fallback, Action<IIntercept> start, Action<IIntercept> backpropagationAction, params IIntercept[] interceptors)
+        public Pipe(IInterceptionContext fallback, Action<IIntercept<T>> start, Action<IIntercept<T>> backpropagationAction, params IIntercept<T>[] interceptors)
         {
             this.endAction = backpropagationAction;
             this.interceptors = interceptors;
@@ -28,39 +28,39 @@ namespace heitech.InterceptXt.Pipeline
             this.fallback = fallback;
         }
 
-        public void BackwardIntercept()
-            => BackwardIntercept(fallback);
+        public void BackwardIntercept(T obj)
+            => BackwardIntercept(fallback, obj);
 
-        public void BackwardIntercept(IInterceptionContext context)
+        public void BackwardIntercept(IInterceptionContext context, T obj)
         {
             var reversed = interceptors.Reverse();
-            foreach (IIntercept interceptor in reversed)
+            foreach (IIntercept<T> interceptor in reversed)
             {
                 endAction(interceptor);
-                if (interceptor is IBothWayInterceptor bothways)
-                    bothways.BackWardInvoke(context);
+                if (interceptor is IBothWayInterceptor<T> bothways)
+                    bothways.BackWardInvoke(context, obj);
                 else
-                    interceptor.Invoke(context);
+                    interceptor.Invoke(context, obj);
             }
         }
 
-        public void ForwardIntercept()
-            => ForwardIntercept(fallback);
+        public void ForwardIntercept(T obj)
+            => ForwardIntercept(fallback, obj);
 
-        public void ForwardIntercept(IInterceptionContext context)
+        public void ForwardIntercept(IInterceptionContext context, T obj)
             => interceptors.ForAll(x =>
             {
                 startingAction(x);
-                x.Invoke(context);
+                x.Invoke(context, obj);
             });
 
-        public void StartIntercept()
-            => StartIntercept(fallback);
+        public void StartIntercept(T obj)
+            => StartIntercept(fallback, obj);
 
-        public void StartIntercept(IInterceptionContext context)
+        public void StartIntercept(IInterceptionContext context, T obj)
         {
-            ForwardIntercept(context);
-            BackwardIntercept(context);
+            ForwardIntercept(context, obj);
+            BackwardIntercept(context, obj);
         }
     }
 }

@@ -8,14 +8,15 @@ namespace heitech.InterceptXt.Tests.Pipeline
     [TestClass]
     public class MultiPipeTests
     {
-        private readonly MultiPipe<string> pipe = new MultiPipe<string>();
-        private readonly InterceptionPipeMock mock = new InterceptionPipeMock();
+        private readonly MultiPipe<string, string> pipe = new MultiPipe<string, string>();
+        private readonly InterceptionPipeMock<string> mock = new InterceptionPipeMock<string>();
+        private readonly string intercept = "empty";
 
         [TestMethod]
         public void Multipipe_MapOverridesItem_OnMapTwice()
         {
             pipe.Map("key", mock);
-            pipe.Map("key", new InterceptionPipeMock());
+            pipe.Map("key", new InterceptionPipeMock<string>());
 
             Assert.AreNotSame(mock, pipe["key"]);
         }
@@ -25,9 +26,9 @@ namespace heitech.InterceptXt.Tests.Pipeline
         {
             string key = "key";
             pipe.Map(key, mock);
-            AssertMap(() => pipe.StartIntercept(key));
-            AssertMap(() => pipe.ForwardIntercept(key));
-            AssertMap(() => pipe.BackwardIntercept(key));
+            AssertMap(() => pipe.StartIntercept(key, intercept));
+            AssertMap(() => pipe.ForwardIntercept(key, intercept));
+            AssertMap(() => pipe.BackwardIntercept(key, intercept));
         }
 
         private void AssertMap(Action _do)
@@ -40,9 +41,9 @@ namespace heitech.InterceptXt.Tests.Pipeline
         [TestMethod]
         public void Multipipe_ThrowsAttributeNotFoundException_ifPipe_IsNotMapped()
         {
-            Assert.ThrowsException<KeyNotFoundException>(() => pipe.StartIntercept("key"));
-            Assert.ThrowsException<KeyNotFoundException>(() => pipe.ForwardIntercept("key"));
-            Assert.ThrowsException<KeyNotFoundException>(() => pipe.BackwardIntercept("key"));
+            Assert.ThrowsException<KeyNotFoundException>(() => pipe.StartIntercept("key", intercept));
+            Assert.ThrowsException<KeyNotFoundException>(() => pipe.ForwardIntercept("key", intercept));
+            Assert.ThrowsException<KeyNotFoundException>(() => pipe.BackwardIntercept("key", intercept));
         }
     }
 }

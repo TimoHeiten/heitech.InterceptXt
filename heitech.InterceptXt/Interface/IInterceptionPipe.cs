@@ -1,14 +1,14 @@
 ﻿namespace heitech.InterceptXt.Interface
 {
-    public interface IInterceptionPipe
+    public interface IInterceptionPipe<T>
     {
-        void StartIntercept();
-        void StartIntercept(IInterceptionContext context);
+        void StartIntercept(T obj_to_intercept);
+        void StartIntercept(IInterceptionContext context, T obj_to_intercept);
 
-        void ForwardIntercept();
-        void ForwardIntercept(IInterceptionContext context);
+        void ForwardIntercept(T obj_to_intercept);
+        void ForwardIntercept(IInterceptionContext context, T obj_to_intercept);
 
-        void BackwardIntercept();
-        void BackwardIntercept(IInterceptionContext context);
+        void BackwardIntercept(T obj_to_intercept);
+        void BackwardIntercept(IInterceptionContext context, T obj_to_intercept);
     }
 }

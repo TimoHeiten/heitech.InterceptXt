@@ -7,23 +7,23 @@ namespace heitech.InterceptXt.Interface
 {
     public static class Factory
     {
-        public static IInterceptionPipe Create(params IIntercept[] interceptors) 
-            => Create(_ => { }, interceptors);
+        public static IInterceptionPipe<T> Create<T>(params IIntercept<T>[] interceptors) 
+            => Create<T>(_ => { }, interceptors);
 
-        public static IInterceptionPipe Create(Action<IIntercept> action, params IIntercept[] interceptors) 
-            => Create(action, _ => { }, interceptors);
+        public static IInterceptionPipe<T> Create<T>(Action<IIntercept<T>> action, params IIntercept<T>[] interceptors) 
+            => Create<T>(action, _ => { }, interceptors);
 
-        public static IInterceptionPipe Create(Action<IIntercept> action, Action<IIntercept> backwardAction, params IIntercept[] interceptors)
-            => Create(action, backwardAction, GetContext(), interceptors);
+        public static IInterceptionPipe<T> Create<T>(Action<IIntercept<T>> action, Action<IIntercept<T>> backwardAction, params IIntercept<T>[] interceptors)
+            => Create<T>(action, backwardAction, GetContext(), interceptors);
 
-        public static IInterceptionPipe Create(Action<IIntercept> action, Action<IIntercept> backwardAction, IInterceptionContext _defaultContext, params IIntercept[] interceptors)
-            => new Pipe(_defaultContext, action, backwardAction, interceptors);
+        public static IInterceptionPipe<T> Create<T>(Action<IIntercept<T>> action, Action<IIntercept<T>> backwardAction, IInterceptionContext _defaultContext, params IIntercept<T>[] interceptors)
+            => new Pipe<T>(_defaultContext, action, backwardAction, interceptors);
 
         private static IInterceptionContext GetContext() 
             => new InterceptorContext(AttributeExtenderFactory.Create<string>());
 
         //##### multipipe
-        public static IMultiPipe<Key> CreateMultiPipe<Key>()
-            => new MultiPipe<Key>();
+        public static IMultiPipe<Key, T> CreateMultiPipe<Key, T>()
+            => new MultiPipe<Key, T>();
     }
 }

@@ -1,7 +1,5 @@
-﻿using heitech.InterceptXt.Interface;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using heitech.InterceptXt.Interface;
 
 namespace heitech.InterceptXt.Tests
 {

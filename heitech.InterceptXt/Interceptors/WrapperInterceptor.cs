@@ -3,27 +3,27 @@ using System;
 
 namespace heitech.InterceptXt.Interceptors
 {
-    public class WrapperInterceptor : IIntercept
+    public class WrapperInterceptor<T> : IIntercept<T>
     {
-        private readonly Action<IInterceptionContext> wrappedAction;
+        private readonly Action<IInterceptionContext, T> wrappedAction;
 
-        public WrapperInterceptor(Action<IInterceptionContext> wrappedAction)
+        public WrapperInterceptor(Action<IInterceptionContext, T> wrappedAction)
             => this.wrappedAction = wrappedAction;
 
-        public void Invoke(IInterceptionContext context)
-            => wrappedAction(context);
+        public void Invoke(IInterceptionContext context, T obj)
+            => wrappedAction(context, obj);
         
     }
 
-    public class WrapperBothWayInterceptor : WrapperInterceptor, IBothWayInterceptor
+    public class WrapperBothWayInterceptor<T> : WrapperInterceptor<T>, IBothWayInterceptor<T>
     {
 
-        private readonly Action<IInterceptionContext> backwardAction;
+        private readonly Action<IInterceptionContext, T> backwardAction;
 
-        public WrapperBothWayInterceptor(Action<IInterceptionContext> wrappedAction, Action<IInterceptionContext> backwardAction) : base(wrappedAction) 
+        public WrapperBothWayInterceptor(Action<IInterceptionContext, T> wrappedAction, Action<IInterceptionContext, T> backwardAction) : base(wrappedAction) 
             => this.backwardAction = backwardAction;
 
-        public void BackWardInvoke(IInterceptionContext context)
-            => backwardAction(context);
+        public void BackWardInvoke(IInterceptionContext context, T obj)
+            => backwardAction(context, obj);
     }
 }

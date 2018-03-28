@@ -8,14 +8,12 @@ namespace heitech.InterceptXt.Tests.Context
     public class InterceptionContextsTests
     {
         private InterceptorContext context;
-        private GenericContext<string, int> generic;
 
         [TestInitialize]
         public void Init()
         {
             var extender = AttributeExtenderFactory.Create<string>();
             context = new InterceptorContext(extender);
-            generic = new GenericContext<string, int>(extender);
         }
 
         [TestMethod]
