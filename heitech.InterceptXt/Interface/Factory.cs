@@ -25,5 +25,12 @@ namespace heitech.InterceptXt.Interface
         //##### multipipe
         public static IMultiPipe<Key, T> CreateMultiPipe<Key, T>()
             => new MultiPipe<Key, T>();
+
+        //### concurrent pipe
+        public static IConcurrentInterceptionPipe<T> CreateConcurrent<T>(params IConcurrentIntercept<T>[] interceptors)
+        => new ConcurrentPipe<T>();
+
+        public static IConcurrentInterceptionPipe<T> CreateConcurrent<T>(IInterceptionContext _fallback, params IConcurrentIntercept<T>[] interceptors)
+        => new ConcurrentPipe<T>(_fallback);
     }
 }
